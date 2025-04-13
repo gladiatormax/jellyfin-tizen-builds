@@ -1,0 +1,46 @@
+{
+  "commits": [
+    {
+      "owner": "jellyfin",
+      "repo": "jellyfin-tizen",
+      "ref": "master",
+      "name": "master",
+      "matrix": false,
+      "latest": "5760c2c7deb7a892f7faf8c25600875737e5b879"
+    },
+    {
+      "owner": "jellyfin",
+      "repo": "jellyfin-web",
+      "ref": "release-10.9.z",
+      "name": "10.9.z",
+      "matrix": true,
+      "latest": "6cae5c2646f39f0f63afb204fd12cedf398b80ad"
+    },
+    {
+      "owner": "jellyfin",
+      "repo": "jellyfin-web",
+      "ref": "release-10.10.z",
+      "name": "10.10.z",
+      "matrix": true,
+      "latest": "f4b8aa0ed4c5b571a3a6cc3bb027bb8ecebe5b68"
+    },
+    {
+      "owner": "jellyfin",
+      "repo": "jellyfin-web",
+      "ref": "master",
+      "name": "master",
+      "matrix": true,
+      "modern": true,
+      "latest": "f03bb2f57863f792804bdab420bd8b4a3a221f33"
+    }
+  ],
+  "releases": [
+    {
+      "owner": "jellyfin",
+      "repo": "jellyfin-web",
+      "latest": "v10.10.7",
+      "matrix": true,
+      "default": true
+    }
+  ]
+}

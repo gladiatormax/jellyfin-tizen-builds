@@ -11,95 +11,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Store versions to variables
-        id: versions
+      - name: Check for updates
+        id: updates
+        shell: pwsh
         run: |
-          varNames=("hash" "release" "prerelease")
-          idx=0
-          if [ -f versions ]; then
-            while IFS= read -r line; do
-              echo "${varNames[$idx]}=$line"
-              echo "${varNames[$idx]}=$line" >> $GITHUB_OUTPUT
-              idx=$((idx+1))
-            done < versions
-          else
-            echo "hash=" >> $GITHUB_OUTPUT
-            echo "release=" >> $GITHUB_OUTPUT
-            echo "prerelease=" >> $GITHUB_OUTPUT
-          fi
-      - uses: octokit/request-action@v2.x
-        id: get_master_commit_tizen
-        with:
-          route: GET /repos/{owner}/{repo}/commits/master
-          owner: jellyfin
-          repo: jellyfin-tizen
+          ./scripts/Check-Updates.ps1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Output master commit hash
-        run: |
-          echo "${{ fromJson(steps.get_master_commit_tizen.outputs.data).sha }}" > versions
-      - name: "Get Latest Web Release"
-        id: last_web_release
-        uses: robinraju/release-downloader@cb096d8fa1fcb0e897f30b1c571f07e2c8e12479
-        with:
-          repository: 'jellyfin/jellyfin-web'
-          latest: true
-          tarBall: true
-          zipBall: false
-      - name: "Get Latest Web PreRelease"
-        id: last_web_prerelease
-        uses: robinraju/release-downloader@cb096d8fa1fcb0e897f30b1c571f07e2c8e12479
-        with:
-          repository: 'jellyfin/jellyfin-web'
-          latest: true
-          preRelease: true
-          tarBall: true
-          zipBall: false
-      - name: Output web release tag
-        run: |
-          echo "${{ toJson(steps.last_web_release.outputs) }}"
-          echo "${{ steps.last_web_release.outputs.tag_name }}" >> versions
-      - name: Output web prerelease tag
-        run: |
-          echo "${{ steps.last_web_prerelease.outputs.tag_name }}" >> versions
-      - name: Commit Version Data
+      
+      - name: Commit Updated Files
         run: |
           git config --global user.name 'jeppevinkel'
           git config --global user.email 'jeppevinkel@users.noreply.github.com'
-          git add versions
+          git add versions.json
+          git add matrix.json
           git commit -m "Automated Version Update" || echo "No changes to commit"
           git push
-      - name: Check for differences
-        id: diffcheck
-        run: |
-          causeOfUpdateLabel="### Cause of the update\n"
-          shouldUpdate=false
-          echo "hash: ${{ steps.versions.outputs.hash }} = ${{ steps.versions.outputs.hash != fromJson(steps.get_master_commit_tizen.outputs.data).sha}}"
-          if ${{ steps.versions.outputs.hash != fromJson(steps.get_master_commit_tizen.outputs.data).sha}}; then
-            causeOfUpdateLabel+="New commit to https://github.com/jellyfin/jellyfin-tizen/commit/${{ fromJson(steps.get_master_commit_tizen.outputs.data).sha }}\n"
-            shouldUpdate=true
-          fi
-          echo "release: ${{ steps.versions.outputs.release }} = ${{ steps.versions.outputs.release != steps.last_web_release.outputs.tag_name }}"
-          if ${{ steps.versions.outputs.release != steps.last_web_release.outputs.tag_name }}; then
-            causeOfUpdateLabel+="New jellyfin-web release\n"
-            shouldUpdate=true
-          fi
-          echo "prerelease: ${{ steps.versions.outputs.prerelease }} = ${{ steps.versions.outputs.prerelease != steps.last_web_prerelease.outputs.tag_name }}"
-          if ${{ steps.versions.outputs.prerelease != steps.last_web_prerelease.outputs.tag_name }}; then
-            causeOfUpdateLabel+="New jellyfin-web prerelease\n"
-            shouldUpdate=true
-          fi
-          
-          echo "causeOfUpdateLabel=$causeOfUpdateLabel" >> $GITHUB_OUTPUT
-
-          if $shouldUpdate; then
-            echo "shouldUpdate=true" >> $GITHUB_OUTPUT
-          else
-            echo "shouldUpdate=false" >> $GITHUB_OUTPUT
-          fi
+      
       - name: Trigger build workflow
-        if: ${{ steps.diffcheck.outputs.shouldUpdate == 'true' }}
+        if: ${{ steps.updates.outputs.triggerBuild == 'true' }}
         uses: benc-uk/workflow-dispatch@v1
         with:
           workflow: build-new-release.yml
-          inputs: '{"webReleaseTagName": "${{ steps.last_web_release.outputs.tag_name }}", "webPreReleaseTagName": "${{ steps.last_web_prerelease.outputs.tag_name }}", "rawMarkdown": "${{ steps.diffcheck.outputs.causeOfUpdateLabel }}"}'
+          inputs: '{"rawMarkdown": "${{ steps.updates.outputs.causeOfUpdateLabel }}", "webReleaseTagName": "${{ steps.updates.outputs.webReleaseTagName }}"}'

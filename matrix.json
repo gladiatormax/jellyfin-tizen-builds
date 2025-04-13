@@ -1,0 +1,100 @@
+{
+  "include": [
+    {
+      "tag": "release-10.9.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.9.z"
+    },
+    {
+      "tag": "release-10.10.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.10.z"
+    },
+    {
+      "tag": "master",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-master",
+      "modern": true
+    },
+    {
+      "tag": "v10.10.7",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin"
+    },
+    {
+      "tag": "release-10.9.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.9.z-TrueHD",
+      "true_hd": true
+    },
+    {
+      "tag": "release-10.10.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.10.z-TrueHD",
+      "true_hd": true
+    },
+    {
+      "tag": "master",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-master-TrueHD",
+      "modern": true,
+      "true_hd": true
+    },
+    {
+      "tag": "v10.10.7",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-TrueHD",
+      "true_hd": true
+    },
+    {
+      "tag": "release-10.9.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.9.z-secondary",
+      "secondary": true
+    },
+    {
+      "tag": "release-10.10.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.10.z-secondary",
+      "secondary": true
+    },
+    {
+      "tag": "master",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-master-secondary",
+      "modern": true,
+      "secondary": true
+    },
+    {
+      "tag": "v10.10.7",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-secondary",
+      "secondary": true
+    },
+    {
+      "tag": "release-10.9.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.9.z-OblongIcon",
+      "oblong_icon": true
+    },
+    {
+      "tag": "release-10.10.z",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-10.10.z-OblongIcon",
+      "oblong_icon": true
+    },
+    {
+      "tag": "master",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-master-OblongIcon",
+      "modern": true,
+      "oblong_icon": true
+    },
+    {
+      "tag": "v10.10.7",
+      "repository": "jellyfin/jellyfin-web",
+      "artifact_name": "Jellyfin-OblongIcon",
+      "oblong_icon": true
+    }
+  ]
+}
